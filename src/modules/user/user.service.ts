@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { User, UserAddress } from '@prisma/client';
 import axios from 'axios';
 import moment from 'moment-timezone';
 import { PrismaService } from 'src/config/db/prisma.service';
@@ -8,17 +8,26 @@ import { PrismaService } from 'src/config/db/prisma.service';
 export class UserService implements OnModuleInit {
   constructor(private prisma: PrismaService) {}
   onModuleInit() {
-    // Migrate dealer that does not have RBAC User ID
+    this.migrate();
+  }
+
+  async migrate() {
     this.prisma.user
       .findMany({
         where: {
           roleId: 142,
           rbacUserId: null,
         },
+        include: {
+          addresses: true,
+        },
       })
       .then((users) => {
         for (const user of users) {
-          this.createRbacUser(user);
+          this.createRbacUser(
+            user,
+            user.addresses.length ? user.addresses[0] : null,
+          );
         }
       });
   }
@@ -31,10 +40,13 @@ export class UserService implements OnModuleInit {
     });
   }
 
-  async createRbacUser(user: User): Promise<User> {
+  async createRbacUser(
+    user: User,
+    userAddress: UserAddress | null = null,
+  ): Promise<User> {
     const data = JSON.stringify({
       dob: moment.utc(user.dob).format('YYYY-MM-DD'),
-      address: 'Jl. Lorem ipsum',
+      address: userAddress ? userAddress.address : '',
       countryCode: '62',
       email: user.email,
       idCardImageUrl: user.idCardImageUrl || '',

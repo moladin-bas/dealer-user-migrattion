@@ -16,15 +16,26 @@ model User {
   rbacUserId Int?   @map("rbac_user_id")
 
   dob                  DateTime? @db.Date()
-  email                String?
-  idCardImageUrl       String?   @map("ktp_photo_url")
-  idCardSelfieImageUrl String?   @map("selfie_url")
-  joinDate             DateTime? @map("join_date")
-  name                 String?   @map("full_name")
-  nationalId           String?   @map("ktp_number")
-  phone                String    @map("phone_number")
+  email                String?   @db.VarChar(255)
+  idCardImageUrl       String?   @map("ktp_photo_url") @db.VarChar(255)
+  idCardSelfieImageUrl String?   @map("selfie_url") @db.VarChar(255)
+  joinDate             DateTime? @map("join_date") @db.Date
+  name                 String?   @map("full_name") @db.VarChar(255)
+  nationalId           String?   @map("ktp_number") @db.VarChar(255)
+  phone                String    @map("phone_number") @db.VarChar(255)
 
-  roleId Int? @map("role_id")
+  roleId    Int?          @map("role_id")
+  addresses UserAddress[]
 
   @@map("users")
+}
+
+model UserAddress {
+  id      Int     @id @default(autoincrement())
+  userId  Int?    @map("user_id")
+  address String?
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("user_addresses")
 }
