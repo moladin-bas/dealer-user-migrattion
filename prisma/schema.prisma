@@ -19,7 +19,7 @@ model User {
   email                String?   @db.VarChar(255)
   idCardImageUrl       String?   @map("ktp_photo_url") @db.VarChar(255)
   idCardSelfieImageUrl String?   @map("selfie_url") @db.VarChar(255)
-  joinDate             DateTime? @map("join_date") @db.Date
+  joinDate             DateTime? @map("join_date")
   name                 String?   @map("full_name") @db.VarChar(255)
   nationalId           String?   @map("ktp_number") @db.VarChar(255)
   phone                String    @map("phone_number") @db.VarChar(255)

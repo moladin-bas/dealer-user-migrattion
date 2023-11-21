@@ -46,11 +46,15 @@ export class UserService implements OnModuleInit {
   ): Promise<User> {
     const data = JSON.stringify({
       dob: moment.utc(user.dob).format('YYYY-MM-DD'),
-      address: userAddress ? userAddress.address : '',
+      address: userAddress ? userAddress.address : 'Jakarta',
       countryCode: '62',
       email: user.email,
-      idCardImageUrl: user.idCardImageUrl || '',
-      idCardSelfieImageUrl: user.idCardSelfieImageUrl || '',
+      idCardImageUrl:
+        user.idCardImageUrl ||
+        'https://auth-service-stg.s3.ap-southeast-1.amazonaws.com/025a1534-c0b8-3890-9089-793487959907.jpeg',
+      idCardSelfieImageUrl:
+        user.idCardSelfieImageUrl ||
+        'https://auth-service-stg.s3.ap-southeast-1.amazonaws.com/025a1534-c0b8-3890-9089-793487959907.jpeg',
       joinDate: moment(user.joinDate || new Date()).format('YYYY-MM-DD'),
       name: user.name,
       nationality: 'WNI',
