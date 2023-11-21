@@ -12,7 +12,7 @@ export class UserService implements OnModuleInit {
     this.prisma.user
       .findMany({
         where: {
-          roleId: 114, // Dealer role ID
+          roleId: 142,
           rbacUserId: null,
         },
       })
@@ -37,9 +37,9 @@ export class UserService implements OnModuleInit {
       address: 'Jl. Lorem ipsum',
       countryCode: '62',
       email: user.email,
-      idCardImageUrl: user.idCardImageUrl,
-      idCardSelfieImageUrl: user.idCardSelfieImageUrl,
-      joinDate: moment.utc(user.joinDate).format('YYYY-MM-DD'),
+      idCardImageUrl: user.idCardImageUrl || '',
+      idCardSelfieImageUrl: user.idCardSelfieImageUrl || '',
+      joinDate: moment(user.joinDate || new Date()).format('YYYY-MM-DD'),
       name: user.name,
       nationality: 'WNI',
       nik: user.nationalId,
@@ -55,7 +55,7 @@ export class UserService implements OnModuleInit {
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://auth-service.development.mofi.id/user-management/service',
+      url: 'https://auth-service.staging.mofi.id/user-management/service',
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer rahasiaAuthService1',
@@ -104,7 +104,7 @@ export class UserService implements OnModuleInit {
       method: 'get',
       maxBodyLength: Infinity,
       url:
-        'https://auth-service.development.mofi.id/user-management/detail?phone=' +
+        'https://auth-service.staging.mofi.id/user-management/detail?phone=' +
         phone,
       headers: {
         Authorization: 'Bearer rahasiaAuthService1',
