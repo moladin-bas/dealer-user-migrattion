@@ -12,30 +12,30 @@ export class UserService implements OnModuleInit {
   }
 
   async migrate() {
-    this.prisma.user
-      .findMany({
-        where: {
-          roleId: 142,
-          rbacUserId: null,
-        },
-        include: {
-          addresses: true,
-        },
-      })
-      .then((users) => {
-        for (const user of users) {
-          this.createRbacUser(
-            user,
-            user.addresses.length ? user.addresses[0] : null,
-          );
-        }
-      });
+    const users = await this.prisma.user.findMany({
+      where: {
+        roleId: 142,
+        rbacUserId: null,
+      },
+      include: {
+        addresses: true,
+      },
+    });
+
+    for (const user of users) {
+      await this.createRbacUser(
+        user,
+        user.addresses.length ? user.addresses[0] : null,
+      );
+    }
+
+    console.log(users.map((u) => u.id));
   }
 
   async getDealers(): Promise<User[]> {
     return this.prisma.user.findMany({
       where: {
-        roleId: 114,
+        roleId: 142,
       },
     });
   }
