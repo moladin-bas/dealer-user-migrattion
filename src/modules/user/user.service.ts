@@ -20,6 +20,7 @@ export class UserService implements OnModuleInit {
       include: {
         addresses: true,
       },
+      take: 100,
     });
 
     for (const user of users) {
@@ -27,6 +28,7 @@ export class UserService implements OnModuleInit {
         user,
         user.addresses.length ? user.addresses[0] : null,
       );
+      console.log('====================================');
     }
 
     console.log(users.map((u) => u.id));
@@ -91,7 +93,7 @@ export class UserService implements OnModuleInit {
         return null;
       })
       .catch((error) => {
-        console.log(user.id);
+        console.log(`Create user ID ${user.id}`);
         console.log(error.response.data);
 
         return null;
@@ -139,7 +141,7 @@ export class UserService implements OnModuleInit {
         return null;
       })
       .catch((error) => {
-        console.log(phone);
+        console.log(`Check phone ${phone}`);
         console.log(error.response.data);
 
         return null;
